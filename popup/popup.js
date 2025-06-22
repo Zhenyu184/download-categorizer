@@ -7,17 +7,19 @@ function updateUI(enabled) {
     status.style.color = enabled ? '#319795' : '#f27843';
 }
 
-chrome.storage.sync.get({ categorizerEnabled: true }, (data) => {
-    console.log('[Popup] init toggle button clicked');
-    updateUI(data.categorizerEnabled);
+chrome.storage.local.get(['globalEnabled'], (result) => {
+    const currentEnabled = result.globalEnabled !== undefined ? result.globalEnabled : true;
+    updateUI(currentEnabled);
 });
 
 btn.addEventListener('click', () => {
-    console.log('[Popup] toggle button clicked 2');
-    chrome.storage.sync.get({ categorizerEnabled: true }, (data) => {
-        const newValue = !data.categorizerEnabled;
-        chrome.storage.sync.set({ categorizerEnabled: newValue }, () => {
-            updateUI(newValue);
+    
+    chrome.storage.local.get(['globalEnabled'], (result) => {
+        const currentEnabled = result.globalEnabled !== undefined ? result.globalEnabled : true;
+        const newEnabled = !currentEnabled;
+        
+        chrome.storage.local.set({ globalEnabled: newEnabled }, () => {
+            updateUI(newEnabled);
         });
     });
 });
