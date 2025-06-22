@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Categorizer - Setting</title>
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>這頁還在做</h1>
+            <p class="subtitle">Customize your download file categorization rules</p>
+        </header>
+
+        <main>
+            <!-- Global Status Settings -->
+            <section class="settings-section">
+                <h2>Global Settings</h2>
+                <div class="setting-item">
+                    <label class="switch">
+                        <input type="checkbox" id="global-enable">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                        <h3>Enable Auto Categorization</h3>
+                        <p>Turn on or off the automatic categorization of downloaded files</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Folder Mapping Settings -->
+            <section class="settings-section">
+                <h2>Folder Mapping</h2>
+                <div class="mapping-container">
+                    <div class="mapping-header">
+                        <span>Folder Name</span>
+                        <span>Extensions</span>
+                        <span>Actions</span>
+                    </div>
+                    <div id="mapping-list" class="mapping-list">
+                        <!-- 動態產生的對應列表 -->
+                    </div>
+                    <button id="add-mapping-btn" class="btn btn-primary">Add Mapping</button>
+                </div>
+            </section>
+
+            <!-- Advanced Settings -->
+            <section class="settings-section">
+                <h2>Advanced Settings</h2>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>File Conflict Handling</h3>
+                        <select id="conflict-action" class="form-select">
+                            <option value="uniquify">Automatically Rename</option>
+                            <option value="overwrite">Overwrite Existing File</option>
+                            <option value="prompt">Ask User</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Import/Export Settings -->
+            <section class="settings-section">
+                <h2>Import/Export Settings</h2>
+                <div class="setting-item">
+                    <div class="button-group">
+                        <button id="export-btn" class="btn btn-secondary">Export Settings</button>
+                        <button id="import-btn" class="btn btn-secondary">Import Settings</button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <button id="reset-btn" class="btn btn-danger">Reset to Default</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-buttons">
+                <button id="save-btn" class="btn btn-success">Save Settings</button>
+                <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            </div>
+            <p class="footer-info">
+                <a href="https://github.com/Zhenyu184/download-collector" target="_blank" rel="noopener noreferrer">
+                    GitHub Repository
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Add Mapping Modal -->
+    <div id="add-mapping-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Folder Mapping</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="folder-name">Folder Name:</label>
+                    <input type="text" id="folder-name" class="form-input" placeholder="e.g. documents">
+                </div>
+                <div class="form-group">
+                    <label for="extensions">Extensions (comma separated):</label>
+                    <input type="text" id="extensions" class="form-input" placeholder="e.g. pdf,doc,docx">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-add-btn" class="btn btn-primary">Confirm Add</button>
+                <button id="cancel-add-btn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
