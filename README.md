@@ -61,6 +61,7 @@
 
 - [GitHub Repository](https://github.com/Zhenyu184/download-collector)
 - [GPLv3 授權條款](LICENSE)
+- [FAQ](docs/FAQ.md)
 
 <br>
 

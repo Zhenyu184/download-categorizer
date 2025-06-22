@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Download Categorizer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "This extension automatically listens to download events and categorizes downloaded files into folders.",
     "permissions": ["downloads", "downloads.open", "downloads.shelf", "storage"],
     "background": {
