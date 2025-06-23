@@ -10,7 +10,8 @@ export class StatusHandler {
         }
         
         this.enabled = defaultConfig.globalStatus.enable;
-        this.saveToStorage();
+        this.conflictAction = defaultConfig.globalStatus.conflictAction;
+        this.saveAllToStorage();
         this.setupStorageListener();
         StatusHandler.#instance = this;
     }
@@ -22,12 +23,19 @@ export class StatusHandler {
         return StatusHandler.#instance;
     }
 
-    saveToStorage() {
-        chrome.storage.local.set({ globalEnabled: this.enabled }, () => {});
+    saveAllToStorage() {
+        chrome.storage.local.set({
+            globalEnabled: this.enabled,
+            globalConflictAction: this.conflictAction
+        }, () => {});
     }
 
     getEnabled() {
         return this.enabled;
+    }
+
+    getConflictAction() {
+        return this.conflictAction;
     }
 
     setupStorageListener() {
@@ -38,6 +46,14 @@ export class StatusHandler {
                 
                 if (newValue !== this.enabled) {
                     this.enabled = newValue;
+                }
+            }
+            if (areaName === 'local' && changes.globalConflictAction) {
+                const newValue = changes.globalConflictAction.newValue;
+                const oldValue = changes.globalConflictAction.oldValue;
+                
+                if (newValue !== this.conflictAction) {
+                    this.conflictAction = newValue;
                 }
             }
         });

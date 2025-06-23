@@ -1,6 +1,7 @@
 export const defaultConfig = {
     globalStatus: {
-        enable: true
+        enable: true,
+        conflictAction: "uniquify"
     },
     folderExtensionMapping: {
         "music": [
