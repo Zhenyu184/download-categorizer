@@ -9,13 +9,13 @@ function updateUI(enabled) {
 }
 
 chrome.storage.local.get(['globalEnabled'], (result) => {
-    const currentEnabled = result.globalEnabled !== undefined ? result.globalEnabled : true;
+    const currentEnabled = (result.globalEnabled !== undefined) ? result.globalEnabled : true;
     updateUI(currentEnabled);
 });
 
 switchBtn.addEventListener('click', () => {
     chrome.storage.local.get(['globalEnabled'], (result) => {
-        const currentEnabled = result.globalEnabled !== undefined ? result.globalEnabled : true;
+        const currentEnabled = (result.globalEnabled !== undefined) ? result.globalEnabled : true;
         const newEnabled = !currentEnabled;
         
         chrome.storage.local.set({ globalEnabled: newEnabled }, () => {
