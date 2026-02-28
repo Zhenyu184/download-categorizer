@@ -31,13 +31,6 @@ class DownloadHandler {
     }
 
     onDeterminingFilename(downloadItem, suggest) {
-        if (this.statusHandler.getEnabled() === false) {
-            suggest({
-                filename: downloadItem.filename
-            });
-            return;
-        }
-
         const extension = FileUtils.getExtension(downloadItem.filename);
         const targetFolder = this.categorizer.categorize(extension);
 
@@ -53,7 +46,7 @@ class DownloadHandler {
 
         suggest({
             filename: newFilename,
-            conflictAction: 'uniquify'
+            conflictAction: this.statusHandler.getConflictAction()
         });
     }
 }

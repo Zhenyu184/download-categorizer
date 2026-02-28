@@ -1,6 +1,5 @@
 export const defaultConfig = {
     globalStatus: {
-        enable: true,
         conflictAction: "uniquify"
     },
     folderExtensionMapping: {
@@ -14,7 +13,7 @@ export const defaultConfig = {
             "jpg", "jpeg", "png", "gif", "bmp", "tiff", "heic", "heif", "raw", "cr2", "nef", "orf", "sr2"
         ],
         "image": [
-            "img", "iso", "dmg"
+            "img", "iso"
         ],
         "program": [
             "c", "cpp", "h", "hpp", "cc", "cs", "java", "py", "js", "mjs", "cjs", "ts", "rb", "go", "rs", "swift", "kt", "sql", "md", "json", "yaml", "yml", "xml", "html", "css", "scss"
