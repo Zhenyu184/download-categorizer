@@ -1,60 +1,68 @@
-import { defaultConfig }       from './default.js';
-import { Categorizer }         from './categorizer.js';
-import { Logger, FileUtils }   from './misc.js';
-import { StatusHandler } from './status.js';
+import { loadConfig, onConfigChanged } from './config.js';
+import { Categorizer } from './categorizer.js';
+import { Logger, FileUtils } from './misc.js';
 
 class DownloadHandler {
+    #config = null;
+    #categorizer = Categorizer.getInstance();
+    #ready;
+
     constructor() {
-        this.statusHandler = StatusHandler.getInstance();
-        this.categorizer = Categorizer.getInstance();
-        this.registerListeners();
+        // Kick off the async config load, but register listeners synchronously:
+        // an MV3 service worker may be woken *by* the download event, and
+        // listeners added after an await can miss it.
+        this.#ready = this.#init();
+        this.#registerListeners();
     }
 
-    registerListeners() {
-        chrome.downloads.onCreated.addListener(this.onCreated.bind(this));
-        chrome.downloads.onChanged.addListener(this.onChanged.bind(this));
-        chrome.downloads.onDeterminingFilename.addListener(this.onDeterminingFilename.bind(this));
+    async #init() {
+        this.#config = await loadConfig();
+        this.#categorizer.setMapping(this.#config.folderExtensionMapping);
+        onConfigChanged((config) => {
+            this.#config = config;
+            this.#categorizer.setMapping(config.folderExtensionMapping);
+        });
     }
 
-    onCreated(downloadItem) {
-        Logger.log(`[DownloadHandler] create download item, ID: ${downloadItem.id}, URL: ${downloadItem.url}, time: ${new Date()}`);
+    #registerListeners() {
+        chrome.downloads.onCreated.addListener((item) => this.#onCreated(item));
+        chrome.downloads.onChanged.addListener((delta) => this.#onChanged(delta));
+        chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
+            this.#onDeterminingFilename(item, suggest);
+            return true; // we respond to suggest() asynchronously
+        });
     }
 
-    onChanged(DownloadDelta) {
-        if (DownloadDelta.state && DownloadDelta.state.current === 'complete') {
-            chrome.downloads.search({ id: DownloadDelta.id }, (results) => {
-                if (!results || results.length === 0) return;
-                const item = results[0];
-                Logger.log(`[DownloadHandler] download complete ID: ${DownloadDelta.id}, filename: ${item.filename}, state: ${item.state}`);
-            });
-        }
+    #onCreated(downloadItem) {
+        Logger.log(`[DownloadHandler] created id=${downloadItem.id} url=${downloadItem.url}`);
     }
 
-    onDeterminingFilename(downloadItem, suggest) {
-        if (this.statusHandler.getEnabled() === false) {
-            suggest({
-                filename: downloadItem.filename
-            });
+    async #onChanged(delta) {
+        if (delta.state?.current !== 'complete') return;
+        const [item] = await chrome.downloads.search({ id: delta.id });
+        if (!item) return;
+        Logger.log(`[DownloadHandler] complete id=${delta.id} file=${item.filename}`);
+    }
+
+    async #onDeterminingFilename(downloadItem, suggest) {
+        await this.#ready;
+
+        if (!this.#config.enabled) {
+            suggest();
             return;
         }
 
         const extension = FileUtils.getExtension(downloadItem.filename);
-        const targetFolder = this.categorizer.categorize(extension);
+        const targetFolder = this.#categorizer.categorize(extension);
 
-        if (!targetFolder || !extension) {
-            suggest({
-                filename: downloadItem.filename
-            });
+        if (!targetFolder) {
+            suggest();
             return;
         }
 
-        const newFilename = `${targetFolder}/${downloadItem.filename}`;
-        Logger.log(`[DownloadHandler] redirect file path: ${newFilename}`);
-
-        suggest({
-            filename: newFilename,
-            conflictAction: 'uniquify'
-        });
+        const filename = `${targetFolder}/${downloadItem.filename}`;
+        Logger.log(`[DownloadHandler] redirect → ${filename}`);
+        suggest({ filename, conflictAction: this.#config.conflictAction });
     }
 }
 

@@ -172,7 +172,7 @@ input:checked + .slider:before {
 
 .mapping-header {
     display: grid;
-    grid-template-columns: 1fr 2fr 100px;
+    grid-template-columns: 1fr 2fr auto;
     gap: 1rem;
     padding: 0.75rem;
     background: #f8f9fa;
@@ -187,13 +187,17 @@ input:checked + .slider:before {
 
 .mapping-item {
     display: grid;
-    grid-template-columns: 1fr 2fr 100px;
+    grid-template-columns: 1fr 2fr auto;
     gap: 1rem;
     padding: 0.75rem;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     margin-bottom: 0.5rem;
     align-items: center;
+}
+
+.mapping-item .form-input {
+    max-width: none;
 }
 
 .mapping-item:hover {

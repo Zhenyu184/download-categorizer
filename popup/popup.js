@@ -1,30 +1,25 @@
-const status = document.getElementById('status');
+import { loadConfig, saveConfig } from '../src/config.js';
+
+const statusEl = document.getElementById('status');
 const switchBtn = document.getElementById('toggle-switch');
 const settingsBtn = document.getElementById('settings-btn');
 
-function updateUI(enabled) {
-    switchBtn.textContent = enabled ? 'Disable' : 'Enable';
-    status.textContent = enabled ? 'Categorizer is ON' : 'Categorizer is OFF';
-    status.style.color = enabled ? '#319795' : '#f27843';
+function render(enabled) {
+    switchBtn.textContent = enabled ? 'Disable Categorizer' : 'Enable Categorizer';
+    statusEl.textContent = enabled ? 'Categorizer is ON' : 'Categorizer is OFF';
+    statusEl.style.color = enabled ? '#319795' : '#f27843';
 }
 
-chrome.storage.local.get(['globalEnabled'], (result) => {
-    const currentEnabled = (result.globalEnabled !== undefined) ? result.globalEnabled : true;
-    updateUI(currentEnabled);
-});
+render((await loadConfig()).enabled);
 
-switchBtn.addEventListener('click', () => {
-    chrome.storage.local.get(['globalEnabled'], (result) => {
-        const currentEnabled = (result.globalEnabled !== undefined) ? result.globalEnabled : true;
-        const newEnabled = !currentEnabled;
-        
-        chrome.storage.local.set({ globalEnabled: newEnabled }, () => {
-            updateUI(newEnabled);
-        });
-    });
+switchBtn.addEventListener('click', async () => {
+    const config = await loadConfig();
+    config.enabled = !config.enabled;
+    await saveConfig(config);
+    render(config.enabled);
 });
 
 settingsBtn.addEventListener('click', () => {
-    chrome.tabs.create({url: chrome.runtime.getURL('settings/settings.html')});
+    chrome.tabs.create({ url: chrome.runtime.getURL('settings/settings.html') });
     window.close();
 });

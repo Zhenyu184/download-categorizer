@@ -1,16 +1,7 @@
-import { defaultConfig } from './default.js';
-
 export class Categorizer {
     static #instance = null;
 
-    constructor() {
-        if (Categorizer.#instance) {
-            return Categorizer.#instance;
-        }
-        
-        this.mapping = defaultConfig.folderExtensionMapping;
-        Categorizer.#instance = this;
-    }
+    #mapping = {};
 
     static getInstance() {
         if (!Categorizer.#instance) {
@@ -19,31 +10,16 @@ export class Categorizer {
         return Categorizer.#instance;
     }
 
-    addMapping(key, value) {
-        if (this.mapping[key]) return false;
-        this.mapping[key] = value;
-        return true;
+    setMapping(mapping) {
+        this.#mapping = mapping ?? {};
     }
 
-    updateMappingKey(currentKey, newKey) {
-        if (!this.mapping[currentKey]) return false;
-        this.mapping[newKey] = this.mapping[currentKey];
-        delete this.mapping[currentKey];
-        return true;
-    }
-
-    updateMappingValue(key, newValue) {
-        if (!this.mapping[key]) return false;
-        this.mapping[key] = newValue;
-        return true;
-    }
-
-    categorize(target) {
-        for (const [key, value] of Object.entries(this.mapping)) {
-            if (!value.includes(target)) continue;
-            return key;
+    /** Return the folder a given extension maps to, or undefined if none. */
+    categorize(extension) {
+        if (!extension) return undefined;
+        for (const [folder, extensions] of Object.entries(this.#mapping)) {
+            if (extensions.includes(extension)) return folder;
         }
         return undefined;
     }
 }
-
