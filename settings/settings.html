@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>這頁還在做</h1>
+            <h1>Settings</h1>
             <p class="subtitle">Customize your download file categorization rules</p>
         </header>
 
@@ -17,10 +17,12 @@
             <!-- Folder Mapping Settings -->
             <section class="settings-section">
                 <h2>Folder Mapping</h2>
+                <div id="mapping-conflicts" class="mapping-hint" hidden></div>
                 <div class="mapping-container">
                     <div class="mapping-header">
                         <span>Folder Name</span>
                         <span>Extensions</span>
+                        <span></span>
                     </div>
                     <div id="mapping-list" class="mapping-list">
                         <!-- 動態產生的對應列表 -->
@@ -66,7 +68,7 @@
                 <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
             </div>
             <p class="footer-info">
-                <a href="https://github.com/Zhenyu184/download-collector" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer">
                     GitHub Repository
                 </a>
             </p>
@@ -90,9 +92,13 @@
                     <input type="text" id="extensions" class="form-input" placeholder="e.g. pdf,doc,docx">
                 </div>
             </div>
+            <div class="modal-footer">
+                <button id="modal-add-btn" class="btn btn-primary">Add</button>
+                <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+            </div>
         </div>
     </div>
 
-    <script src="settings.js"></script>
+    <script type="module" src="settings.js"></script>
 </body>
 </html>

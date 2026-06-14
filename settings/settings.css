@@ -166,13 +166,40 @@ input:checked + .slider:before {
 }
 
 /* 對應列表樣式 */
+.mapping-hint {
+    margin: 1rem 1.5rem 0;
+    padding: 0.75rem 1rem;
+    color: #7a5b00;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.mapping-hint code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+.conflict-list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+}
+
+.conflict-list li {
+    margin-top: 0.25rem;
+}
+
 .mapping-container {
     padding: 1.5rem;
 }
 
 .mapping-header {
     display: grid;
-    grid-template-columns: 1fr 2fr 100px;
+    grid-template-columns: 1fr 2fr auto;
     gap: 1rem;
     padding: 0.75rem;
     background: #f8f9fa;
@@ -187,13 +214,17 @@ input:checked + .slider:before {
 
 .mapping-item {
     display: grid;
-    grid-template-columns: 1fr 2fr 100px;
+    grid-template-columns: 1fr 2fr auto;
     gap: 1rem;
     padding: 0.75rem;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     margin-bottom: 0.5rem;
     align-items: center;
+}
+
+.mapping-item .form-input {
+    max-width: none;
 }
 
 .mapping-item:hover {
