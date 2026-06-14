@@ -5,6 +5,7 @@ import { loadConfig, saveConfig, resetConfig } from '../src/config.js';
 const enableToggle    = document.getElementById('global-enable');
 const conflictSelect  = document.getElementById('conflict-action');
 const mappingList     = document.getElementById('mapping-list');
+const conflictsBox    = document.getElementById('mapping-conflicts');
 const addMappingBtn   = document.getElementById('add-mapping-btn');
 const exportBtn       = document.getElementById('export-btn');
 const importBtn       = document.getElementById('import-btn');
@@ -63,14 +64,20 @@ function renderMappings() {
         folderInput.className = 'form-input';
         folderInput.value = row.folder;
         folderInput.placeholder = 'folder-name';
-        folderInput.addEventListener('input', () => { row.folder = folderInput.value; });
+        folderInput.addEventListener('input', () => {
+            row.folder = folderInput.value;
+            renderConflicts();
+        });
 
         const extInput = document.createElement('input');
         extInput.type = 'text';
         extInput.className = 'form-input';
         extInput.value = row.extensions;
         extInput.placeholder = 'pdf, doc, docx';
-        extInput.addEventListener('input', () => { row.extensions = extInput.value; });
+        extInput.addEventListener('input', () => {
+            row.extensions = extInput.value;
+            renderConflicts();
+        });
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'btn btn-danger';
@@ -83,6 +90,62 @@ function renderMappings() {
         item.append(folderInput, extInput, removeBtn);
         mappingList.appendChild(item);
     });
+
+    renderConflicts();
+}
+
+// Detect extensions that appear in more than one folder. Iteration follows
+// `rows` order, which mirrors how Categorizer resolves a match top-to-bottom,
+// so the first folder in each list is the one that actually wins.
+function detectConflicts() {
+    const extToFolders = new Map();
+    for (const { folder, extensions } of rows) {
+        const name = folder.trim();
+        if (!name) continue;
+        for (const ext of parseExtensions(extensions)) {
+            if (!extToFolders.has(ext)) extToFolders.set(ext, []);
+            const folders = extToFolders.get(ext);
+            if (!folders.includes(name)) folders.push(name);
+        }
+    }
+    return [...extToFolders.entries()]
+        .filter(([, folders]) => folders.length > 1)
+        .map(([ext, folders]) => ({ ext, folders }));
+}
+
+function renderConflicts() {
+    const conflicts = detectConflicts();
+    conflictsBox.replaceChildren();
+
+    if (conflicts.length === 0) {
+        conflictsBox.hidden = true;
+        return;
+    }
+    conflictsBox.hidden = false;
+
+    const title = document.createElement('p');
+    const noun = conflicts.length === 1 ? 'extension is' : 'extensions are';
+    title.textContent =
+        `${conflicts.length} ${noun} mapped to multiple folders. ` +
+        `The first matching folder (top to bottom) is applied:`;
+    conflictsBox.appendChild(title);
+
+    const list = document.createElement('ul');
+    list.className = 'conflict-list';
+    for (const { ext, folders } of conflicts) {
+        const [winner, ...others] = folders;
+        const li = document.createElement('li');
+
+        const extCode = document.createElement('code');
+        extCode.textContent = ext;
+
+        const winnerStrong = document.createElement('strong');
+        winnerStrong.textContent = winner;
+
+        li.append(extCode, ' → ', winnerStrong, ` (also in ${others.join(', ')})`);
+        list.appendChild(li);
+    }
+    conflictsBox.appendChild(list);
 }
 
 function applyConfig(config) {
