@@ -8,7 +8,9 @@
         "description": "显示于 Chrome 应用商店的扩展程序说明。"
     },
 
-    "appName": { "message": "下载分类器" },
+    "appName": {
+        "message": "下载分类器"
+    },
     "popupIntro": {
         "message": "下载分类器会根据文件扩展名，自动将你的下载文件分类整理到对应的文件夹。"
     },
@@ -16,44 +18,114 @@
         "message": "版本 $version$",
         "placeholders": { "version": { "content": "$1", "example": "1.1.0" } }
     },
-    "linkFaq": { "message": "常见问题" },
-    "popupSettingsTitle": { "message": "设置" },
+    "linkFaq": {
+        "message": "常见问题"
+    },
+    "popupSettingsTitle": {
+        "message": "设置"
+    },
 
-    "settingsTitle": { "message": "设置" },
-    "settingsSubtitle": { "message": "自定义你的下载文件分类规则" },
-    "folderMapping": { "message": "文件夹映射" },
-    "folderNameHeader": { "message": "文件夹名称" },
-    "extensionsHeader": { "message": "扩展名" },
-    "addMapping": { "message": "新增映射" },
-    "remove": { "message": "移除" },
-    "advancedSettings": { "message": "高级设置" },
-    "fileConflictHandling": { "message": "文件名冲突处理" },
-    "fileConflictHandlingDesc": { "message": "当已存在同名文件时，选择要如何处理。" },
-    "conflictUniquify": { "message": "自动重命名" },
-    "conflictOverwrite": { "message": "覆盖已有文件" },
-    "conflictPrompt": { "message": "询问用户" },
-    "importExportSettings": { "message": "导入／导出设置" },
-    "exportSettings": { "message": "导出设置" },
-    "importSettings": { "message": "导入设置" },
-    "resetToDefault": { "message": "重置为默认值" },
-    "saveSettings": { "message": "保存设置" },
-    "cancel": { "message": "取消" },
-    "addFolderMapping": { "message": "新增文件夹映射" },
-    "folderNameLabel": { "message": "文件夹名称：" },
-    "folderNamePlaceholder": { "message": "例如：documents" },
-    "extensionsLabel": { "message": "扩展名（以逗号分隔）：" },
-    "extensionsModalPlaceholder": { "message": "例如：pdf,doc,docx" },
-    "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
-    "folderNameRowPlaceholder": { "message": "文件夹名称" },
-    "add": { "message": "新增" },
+    "settingsTitle": {
+        "message": "设置"
+    },
+    "settingsSubtitle": {
+        "message": "自定义你的下载文件分类规则"
+    },
+    "folderMapping": {
+        "message": "文件夹映射"
+    },
+    "folderNameHeader": {
+        "message": "文件夹名称"
+    },
+    "extensionsHeader": {
+        "message": "扩展名"
+    },
+    "addMapping": {
+        "message": "新增映射"
+    },
+    "remove": {
+        "message": "移除"
+    },
+    "advancedSettings": {
+        "message": "高级设置"
+    },
+    "fileConflictHandling": {
+        "message": "文件名冲突处理"
+    },
+    "fileConflictHandlingDesc": {
+        "message": "当已存在同名文件时，选择要如何处理。"
+    },
+    "conflictUniquify": {
+        "message": "自动重命名"
+    },
+    "conflictOverwrite": {
+        "message": "覆盖已有文件"
+    },
+    "conflictPrompt": {
+        "message": "询问用户"
+    },
+    "importExportSettings": {
+        "message": "导入／导出设置"
+    },
+    "exportSettings": {
+        "message": "导出设置"
+    },
+    "importSettings": {
+        "message": "导入设置"
+    },
+    "resetToDefault": {
+        "message": "重置为默认值"
+    },
+    "saveSettings": {
+        "message": "保存设置"
+    },
+    "cancel": {
+        "message": "取消"
+    },
+    "addFolderMapping": {
+        "message": "新增文件夹映射"
+    },
+    "folderNameLabel": {
+        "message": "文件夹名称："
+    },
+    "folderNamePlaceholder": {
+        "message": "例如：documents"
+    },
+    "extensionsLabel": {
+        "message": "扩展名（以逗号分隔）："
+    },
+    "extensionsModalPlaceholder": {
+        "message": "例如：pdf,doc,docx"
+    },
+    "extensionsRowPlaceholder": {
+        "message": "pdf, doc, docx"
+    },
+    "folderNameRowPlaceholder": {
+        "message": "文件夹名称"
+    },
+    "add": {
+        "message": "新增"
+    },
 
-    "extensionsInvalidNotice": { "message": "以下扩展名包含不允许的字符（仅允许英文字母、数字、逗号、句点与空格），请修正后再保存：" },
-    "folderNameInvalidNotice": { "message": "以下文件夹名称不被允许（不可含有 \\ / : * ? \" < > |，不可为「.」或「..」，也不可以空格或句点结尾），请修正后再保存：" },
+    "extensionsInvalidNotice": {
+        "message": "以下扩展名包含不允许的字符（仅允许英文字母、数字、逗号、句点与空格），请修正后再保存："
+    },
+    "folderNameInvalidNotice": {
+        "message": "以下文件夹名称不被允许（不可含有 \\ / : * ? \" < > |，不可为「.」或「..」，也不可以空格或句点结尾），请修正后再保存："
+    },
 
-    "saved": { "message": "已保存！" },
-    "imported": { "message": "已导入" },
-    "invalidSettingsFile": { "message": "设置文件格式无效。" },
-    "resetConfirm": { "message": "确定要将所有设置重置为默认值吗？此操作无法撤销。" },
+    "saved": {
+        "message": "已保存！"
+    },
+    "imported": {
+        "message": "已导入"
+    },
+    "invalidSettingsFile": {
+        "message": "设置文件格式无效。"
+    },
+    "resetConfirm": {
+        "message": "确定要将所有设置重置为默认值吗？此操作无法撤销。"
+    },
 
     "conflictNoticeOne": {
         "message": "有 $count$ 个扩展名映射到多个文件夹，将套用第一个匹配的文件夹（自上而下）：",
