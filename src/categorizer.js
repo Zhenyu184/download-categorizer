@@ -18,7 +18,9 @@ export class Categorizer {
     categorize(extension) {
         if (!extension) return undefined;
         for (const [folder, extensions] of Object.entries(this.#mapping)) {
-            if (extensions.includes(extension)) return folder;
+            // Guard against malformed mappings (non-array values): a stray
+            // value would otherwise throw on .includes() and break every download.
+            if (Array.isArray(extensions) && extensions.includes(extension)) return folder;
         }
         return undefined;
     }

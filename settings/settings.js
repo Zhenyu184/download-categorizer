@@ -61,6 +61,33 @@ function parseExtensions(text) {
     )];
 }
 
+const VALID_CONFLICT_ACTIONS = ['uniquify', 'overwrite', 'prompt'];
+
+// Coerce an untrusted parsed object (e.g. an imported file) into a valid config.
+// Guarantees conflictAction is whitelisted and folderExtensionMapping is a plain
+// object whose every value is a sanitized string array — so a malformed import
+// can never reach storage and break the background's categorizer.
+function sanitizeConfig(raw) {
+    if (!raw || typeof raw !== 'object') throw new Error('not an object');
+
+    const conflictAction = VALID_CONFLICT_ACTIONS.includes(raw.conflictAction)
+        ? raw.conflictAction
+        : defaultConfig.conflictAction;
+
+    const mapping = {};
+    const rawMapping = raw.folderExtensionMapping;
+    if (rawMapping && typeof rawMapping === 'object' && !Array.isArray(rawMapping)) {
+        for (const [folder, exts] of Object.entries(rawMapping)) {
+            const name = String(folder).trim();
+            if (!name || !Array.isArray(exts)) continue;
+            mapping[name] = parseExtensions(exts.map((e) => String(e)).join(','));
+        }
+    }
+    if (Object.keys(mapping).length === 0) throw new Error('no valid mappings');
+
+    return { conflictAction, folderExtensionMapping: mapping };
+}
+
 function rowsFromMapping(mapping) {
     return Object.entries(mapping).map(([folder, exts]) => ({
         folder,
@@ -328,12 +355,9 @@ importFile.addEventListener('change', async () => {
     if (!file) return;
     try {
         const imported = JSON.parse(await file.text());
-        const merged = { ...defaultConfig, ...imported };
-        // Import applies immediately: keep only known keys, persist, reflect in UI.
-        const clean = {
-            conflictAction: merged.conflictAction,
-            folderExtensionMapping: merged.folderExtensionMapping
-        };
+        // Validate + sanitize before persisting: a malformed file must never
+        // reach storage (it would otherwise crash the background categorizer).
+        const clean = sanitizeConfig(imported);
         await saveConfig(clean);
         applyConfig(clean);
         flash(importBtn, t('imported'));
