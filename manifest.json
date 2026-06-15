@@ -1,8 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Download Categorizer",
+    "name": "__MSG_extName__",
     "version": "1.1.0",
-    "description": "This extension automatically listens to download events and categorizes downloaded files into folders.",
+    "description": "__MSG_extDescription__",
+    "default_locale": "en",
     "permissions": ["downloads", "downloads.open", "downloads.shelf", "storage"],
     "background": {
         "service_worker": "src/background.js",

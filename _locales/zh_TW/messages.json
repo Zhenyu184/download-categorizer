@@ -1,0 +1,67 @@
+{
+    "extName": {
+        "message": "下載分類器",
+        "description": "顯示於 Chrome 線上應用程式商店與工具列的擴充功能名稱。"
+    },
+    "extDescription": {
+        "message": "本擴充功能會自動監聽下載事件，並依副檔名將下載的檔案分類到對應資料夾。",
+        "description": "顯示於 Chrome 線上應用程式商店的擴充功能說明。"
+    },
+
+    "appName": { "message": "下載分類器" },
+    "popupIntro": {
+        "message": "下載分類器會依檔案副檔名，自動將你的下載檔案分類整理到對應的資料夾。"
+    },
+    "linkGithub": { "message": "GitHub 儲存庫" },
+    "linkFaq": { "message": "常見問題" },
+    "popupSettingsTitle": { "message": "設定" },
+    "enableCategorizer": { "message": "啟用分類器" },
+    "disableCategorizer": { "message": "停用分類器" },
+    "statusOn": { "message": "分類器：開啟" },
+    "statusOff": { "message": "分類器：關閉" },
+
+    "settingsTitle": { "message": "設定" },
+    "settingsSubtitle": { "message": "自訂你的下載檔案分類規則" },
+    "folderMapping": { "message": "資料夾對應" },
+    "folderNameHeader": { "message": "資料夾名稱" },
+    "extensionsHeader": { "message": "副檔名" },
+    "addMapping": { "message": "新增對應" },
+    "remove": { "message": "移除" },
+    "advancedSettings": { "message": "進階設定" },
+    "fileConflictHandling": { "message": "檔名衝突處理" },
+    "conflictUniquify": { "message": "自動重新命名" },
+    "conflictOverwrite": { "message": "覆寫既有檔案" },
+    "conflictPrompt": { "message": "詢問使用者" },
+    "importExportSettings": { "message": "匯入／匯出設定" },
+    "exportSettings": { "message": "匯出設定" },
+    "importSettings": { "message": "匯入設定" },
+    "resetToDefault": { "message": "重設為預設值" },
+    "saveSettings": { "message": "儲存設定" },
+    "cancel": { "message": "取消" },
+    "addFolderMapping": { "message": "新增資料夾對應" },
+    "folderNameLabel": { "message": "資料夾名稱：" },
+    "folderNamePlaceholder": { "message": "例如：documents" },
+    "extensionsLabel": { "message": "副檔名（以逗號分隔）：" },
+    "extensionsModalPlaceholder": { "message": "例如：pdf,doc,docx" },
+    "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
+    "folderNameRowPlaceholder": { "message": "資料夾名稱" },
+    "add": { "message": "新增" },
+
+    "saved": { "message": "已儲存！" },
+    "importedRemember": { "message": "已匯入 — 記得按儲存" },
+    "invalidSettingsFile": { "message": "設定檔格式無效。" },
+    "resetConfirm": { "message": "確定要將所有設定重設為預設值嗎？此動作無法復原。" },
+
+    "conflictNoticeOne": {
+        "message": "有 $count$ 個副檔名對應到多個資料夾，將套用第一個符合的資料夾（由上而下）：",
+        "placeholders": { "count": { "content": "$1", "example": "1" } }
+    },
+    "conflictNoticeMany": {
+        "message": "有 $count$ 個副檔名對應到多個資料夾，將套用第一個符合的資料夾（由上而下）：",
+        "placeholders": { "count": { "content": "$1", "example": "3" } }
+    },
+    "conflictAlsoIn": {
+        "message": "（同時出現在 $folders$）",
+        "placeholders": { "folders": { "content": "$1", "example": "images, docs" } }
+    }
+}

@@ -1,5 +1,9 @@
 import { defaultConfig } from '../src/default.js';
 import { loadConfig, saveConfig, resetConfig } from '../src/config.js';
+import { localizePage, t } from '../src/i18n.js';
+
+// 翻譯靜態畫面（標題、區段標題、按鈕、衝突處理下拉選單等）。
+localizePage();
 
 // --- Elements ---
 const enableToggle    = document.getElementById('global-enable');
@@ -25,6 +29,10 @@ const extensionsInput = document.getElementById('extensions');
 // Edits live here until "Save Settings" persists them. Each row keeps
 // extensions as a comma-separated string for friendlier inline editing.
 let rows = []; // [{ folder, extensions }]
+
+// settings.html 沒有「啟用」開關（啟用/停用由 popup 控制），這裡只負責
+// 在儲存時保留既有的 enabled 值，不要把它覆寫掉。
+let currentEnabled = defaultConfig.enabled;
 
 // --- Helpers ---
 function parseExtensions(text) {
@@ -63,7 +71,7 @@ function renderMappings() {
         folderInput.type = 'text';
         folderInput.className = 'form-input';
         folderInput.value = row.folder;
-        folderInput.placeholder = 'folder-name';
+        folderInput.placeholder = t('folderNameRowPlaceholder');
         folderInput.addEventListener('input', () => {
             row.folder = folderInput.value;
             renderConflicts();
@@ -73,7 +81,7 @@ function renderMappings() {
         extInput.type = 'text';
         extInput.className = 'form-input';
         extInput.value = row.extensions;
-        extInput.placeholder = 'pdf, doc, docx';
+        extInput.placeholder = t('extensionsRowPlaceholder');
         extInput.addEventListener('input', () => {
             row.extensions = extInput.value;
             renderConflicts();
@@ -81,7 +89,7 @@ function renderMappings() {
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'btn btn-danger';
-        removeBtn.textContent = 'Remove';
+        removeBtn.textContent = t('remove');
         removeBtn.addEventListener('click', () => {
             rows.splice(index, 1);
             renderMappings();
@@ -124,10 +132,10 @@ function renderConflicts() {
     conflictsBox.hidden = false;
 
     const title = document.createElement('p');
-    const noun = conflicts.length === 1 ? 'extension is' : 'extensions are';
-    title.textContent =
-        `${conflicts.length} ${noun} mapped to multiple folders. ` +
-        `The first matching folder (top to bottom) is applied:`;
+    const count = String(conflicts.length);
+    title.textContent = conflicts.length === 1
+        ? t('conflictNoticeOne', [count])
+        : t('conflictNoticeMany', [count]);
     conflictsBox.appendChild(title);
 
     const list = document.createElement('ul');
@@ -142,14 +150,15 @@ function renderConflicts() {
         const winnerStrong = document.createElement('strong');
         winnerStrong.textContent = winner;
 
-        li.append(extCode, ' → ', winnerStrong, ` (also in ${others.join(', ')})`);
+        li.append(extCode, ' → ', winnerStrong, ' ' + t('conflictAlsoIn', [others.join(', ')]));
         list.appendChild(li);
     }
     conflictsBox.appendChild(list);
 }
 
 function applyConfig(config) {
-    enableToggle.checked = config.enabled;
+    currentEnabled = config.enabled;
+    if (enableToggle) enableToggle.checked = config.enabled;
     conflictSelect.value = config.conflictAction;
     rows = rowsFromMapping(config.folderExtensionMapping);
     renderMappings();
@@ -157,7 +166,7 @@ function applyConfig(config) {
 
 function collectConfig() {
     return {
-        enabled: enableToggle.checked,
+        enabled: enableToggle ? enableToggle.checked : currentEnabled,
         conflictAction: conflictSelect.value,
         folderExtensionMapping: mappingFromRows()
     };
@@ -206,7 +215,7 @@ modalAddBtn.addEventListener('click', () => {
 
 saveBtn.addEventListener('click', async () => {
     await saveConfig(collectConfig());
-    flash(saveBtn, 'Saved!');
+    flash(saveBtn, t('saved'));
 });
 
 cancelBtn.addEventListener('click', async () => {
@@ -214,7 +223,7 @@ cancelBtn.addEventListener('click', async () => {
 });
 
 resetBtn.addEventListener('click', async () => {
-    if (!confirm('Reset all settings to default? This cannot be undone.')) return;
+    if (!confirm(t('resetConfirm'))) return;
     applyConfig(await resetConfig());
 });
 
@@ -235,9 +244,9 @@ importFile.addEventListener('change', async () => {
     try {
         const imported = JSON.parse(await file.text());
         applyConfig({ ...defaultConfig, ...imported });
-        flash(importBtn, 'Imported — remember to Save');
+        flash(importBtn, t('importedRemember'));
     } catch {
-        alert('Invalid settings file.');
+        alert(t('invalidSettingsFile'));
     } finally {
         importFile.value = '';
     }
