@@ -98,6 +98,12 @@ body {
     text-decoration: underline;
 }
 
+.sidebar-version {
+    margin: 0.5rem 0 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
 /* 右側內容區 */
 .content {
     flex: 1;
@@ -300,6 +306,19 @@ body {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+/* 含非法字元的副檔名欄位以警示色標示，與下方提示框相呼應 */
+.form-input.input-invalid,
+.form-input.input-invalid:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(192, 86, 79, 0.18);
+}
+
+/* 停用的按鈕（例如有非法字元時的儲存按鈕） */
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .button-group {

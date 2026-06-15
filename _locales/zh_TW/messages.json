@@ -12,7 +12,10 @@
     "popupIntro": {
         "message": "下載分類器會依檔案副檔名，自動將你的下載檔案分類整理到對應的資料夾。"
     },
-    "linkGithub": { "message": "GitHub 儲存庫" },
+    "versionLabel": {
+        "message": "版本 $version$",
+        "placeholders": { "version": { "content": "$1", "example": "1.1.0" } }
+    },
     "linkFaq": { "message": "常見問題" },
     "popupSettingsTitle": { "message": "設定" },
 
@@ -43,6 +46,8 @@
     "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
     "folderNameRowPlaceholder": { "message": "資料夾名稱" },
     "add": { "message": "新增" },
+
+    "extensionsInvalidNotice": { "message": "以下副檔名含有不允許的字元（僅允許英文字母、數字、逗號、句點與空白），請修正後再儲存：" },
 
     "saved": { "message": "已儲存！" },
     "imported": { "message": "已匯入" },
