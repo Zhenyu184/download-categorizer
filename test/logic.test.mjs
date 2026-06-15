@@ -71,5 +71,13 @@ ok('Categorizer.getInstance is a singleton', Categorizer.getInstance() === cat);
 cat.setMapping(null);
 ok('setMapping(null) is safe and yields undefined', cat.categorize('mp3') === undefined);
 
+// Malformed mapping (non-array values) must not throw — guards the background
+// against a bad import bricking every download.
+cat.setMapping({ broken: null, also: 42, good: ['pdf'] });
+let threw = false;
+try { ok('categorize skips non-array values', cat.categorize('pdf') === 'good'); }
+catch { threw = true; }
+ok('categorize never throws on malformed mapping', !threw);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -48,6 +48,7 @@
     "add": { "message": "Add" },
 
     "extensionsInvalidNotice": { "message": "These extensions contain characters that are not allowed (only letters, numbers, commas, periods and spaces). Fix them before saving:" },
+    "folderNameInvalidNotice": { "message": "These folder names are not allowed (cannot contain \\ / : * ? \" < > |, be \".\" or \"..\", or end with a space or period). Fix them before saving:" },
 
     "saved": { "message": "Saved!" },
     "imported": { "message": "Imported" },

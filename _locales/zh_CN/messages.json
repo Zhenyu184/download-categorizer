@@ -48,6 +48,7 @@
     "add": { "message": "新增" },
 
     "extensionsInvalidNotice": { "message": "以下扩展名包含不允许的字符（仅允许英文字母、数字、逗号、句点与空格），请修正后再保存：" },
+    "folderNameInvalidNotice": { "message": "以下文件夹名称不被允许（不可含有 \\ / : * ? \" < > |，不可为「.」或「..」，也不可以空格或句点结尾），请修正后再保存：" },
 
     "saved": { "message": "已保存！" },
     "imported": { "message": "已导入" },

@@ -45,19 +45,27 @@ class DownloadHandler {
     }
 
     async #onDeterminingFilename(downloadItem, suggest) {
-        await this.#ready;
+        // Any throw here (e.g. a malformed mapping that slipped into storage)
+        // must still end in a suggest() call — returning true without ever
+        // calling suggest() leaves the download's filename determination hung.
+        try {
+            await this.#ready;
 
-        const extension = FileUtils.getExtension(downloadItem.filename);
-        const targetFolder = this.#categorizer.categorize(extension);
+            const extension = FileUtils.getExtension(downloadItem.filename);
+            const targetFolder = this.#categorizer.categorize(extension);
 
-        if (!targetFolder) {
-            suggest();
-            return;
+            if (!targetFolder) {
+                suggest();
+                return;
+            }
+
+            const filename = `${targetFolder}/${downloadItem.filename}`;
+            Logger.log(`[DownloadHandler] redirect → ${filename}`);
+            suggest({ filename, conflictAction: this.#config.conflictAction });
+        } catch (err) {
+            Logger.error('[DownloadHandler] onDeterminingFilename failed, falling back to default', err);
+            suggest(); // fall back to Chrome's default behaviour; never hang the download
         }
-
-        const filename = `${targetFolder}/${downloadItem.filename}`;
-        Logger.log(`[DownloadHandler] redirect → ${filename}`);
-        suggest({ filename, conflictAction: this.#config.conflictAction });
     }
 }
 

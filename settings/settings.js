@@ -61,6 +61,52 @@ function parseExtensions(text) {
     )];
 }
 
+// 資料夾名稱採「黑名單」而非白名單：允許任何 Unicode 文字（中文／日文／
+// 韓文／…），只擋掉跨檔案系統真正非法、或會被 Chrome downloads API 拒絕的
+// 字元與模式。白名單會把非拉丁語系名稱全部誤判為非法，違背多國語言需求。
+//   - \ / : * ? " < > | 與控制字元：Windows/macOS/Linux 共同的保留字元
+//   - "." 與 ".."：相對路徑保留名，會被 suggest() 拒絕
+//   - 結尾為句點：Windows 會自動裁掉，造成名稱與設定漂移
+const FOLDER_ILLEGAL_CHARS = /[\\/:*?"<>|\x00-\x1F]/g;
+
+// 回傳資料夾名稱的問題（{ chars } / { reserved } / { trailing }），無問題回 null。
+function folderNameIssue(rawName) {
+    const name = String(rawName).trim();
+    if (!name) return null; // 空列於儲存時被略過，不視為錯誤
+    const bad = name.match(FOLDER_ILLEGAL_CHARS);
+    if (bad) return { chars: [...new Set(bad)] };
+    if (name === '.' || name === '..') return { reserved: name };
+    if (name.endsWith('.')) return { trailing: '.' };
+    return null;
+}
+
+const VALID_CONFLICT_ACTIONS = ['uniquify', 'overwrite', 'prompt'];
+
+// Coerce an untrusted parsed object (e.g. an imported file) into a valid config.
+// Guarantees conflictAction is whitelisted and folderExtensionMapping is a plain
+// object whose every value is a sanitized string array — so a malformed import
+// can never reach storage and break the background's categorizer.
+function sanitizeConfig(raw) {
+    if (!raw || typeof raw !== 'object') throw new Error('not an object');
+
+    const conflictAction = VALID_CONFLICT_ACTIONS.includes(raw.conflictAction)
+        ? raw.conflictAction
+        : defaultConfig.conflictAction;
+
+    const mapping = {};
+    const rawMapping = raw.folderExtensionMapping;
+    if (rawMapping && typeof rawMapping === 'object' && !Array.isArray(rawMapping)) {
+        for (const [folder, exts] of Object.entries(rawMapping)) {
+            const name = String(folder).trim();
+            if (!name || folderNameIssue(name) || !Array.isArray(exts)) continue;
+            mapping[name] = parseExtensions(exts.map((e) => String(e)).join(','));
+        }
+    }
+    if (Object.keys(mapping).length === 0) throw new Error('no valid mappings');
+
+    return { conflictAction, folderExtensionMapping: mapping };
+}
+
 function rowsFromMapping(mapping) {
     return Object.entries(mapping).map(([folder, exts]) => ({
         folder,
@@ -90,8 +136,10 @@ function renderMappings() {
         folderInput.className = 'form-input';
         folderInput.value = row.folder;
         folderInput.placeholder = t('folderNameRowPlaceholder');
+        folderInput.classList.toggle('input-invalid', !!folderNameIssue(row.folder));
         folderInput.addEventListener('input', () => {
             row.folder = folderInput.value;
+            folderInput.classList.toggle('input-invalid', !!folderNameIssue(folderInput.value));
             validate();
         });
 
@@ -124,7 +172,7 @@ function renderMappings() {
 
 // 偵測含有非法字元的副檔名欄位（僅檢查會被儲存的列，即資料夾名稱非空者），
 // 回傳每列的資料夾名稱與出現過的非法字元。
-function detectInvalid() {
+function detectInvalidExtensions() {
     const result = [];
     for (const { folder, extensions } of rows) {
         const name = folder.trim();
@@ -135,27 +183,28 @@ function detectInvalid() {
     return result;
 }
 
-// 與「重複副檔名提示」相同的提示框樣式；有非法字元時顯示並停用儲存按鈕。
-function renderInvalid() {
-    const invalid = detectInvalid();
-    invalidBox.replaceChildren();
-    saveBtn.disabled = invalid.length > 0;
-
-    if (invalid.length === 0) {
-        invalidBox.hidden = true;
-        return;
+// 偵測名稱非法的資料夾列。把每種問題都化為一組「示意字元」以沿用同一種提示
+// 樣式：非法字元列出該字元；保留名（. / ..）列出名稱本身；結尾句點列出 "."。
+function detectInvalidFolders() {
+    const result = [];
+    for (const { folder } of rows) {
+        const issue = folderNameIssue(folder);
+        if (!issue) continue;
+        const chars = issue.chars ?? [issue.reserved ?? issue.trailing];
+        result.push({ folder: folder.trim(), chars });
     }
-    invalidBox.hidden = false;
+    return result;
+}
 
+// 沿用「重複副檔名提示」的樣式輸出一個提示區塊（標題 + 清單）。
+function appendInvalidBlock(titleText, items) {
     const title = document.createElement('p');
-    // fallback：若該語系訊息缺漏或 i18n 快取尚未更新，至少顯示英文提示而非空白。
-    title.textContent = t('extensionsInvalidNotice')
-        || 'These extensions contain characters that are not allowed (only letters, numbers, commas, periods and spaces). Fix them before saving:';
+    title.textContent = titleText;
     invalidBox.appendChild(title);
 
     const list = document.createElement('ul');
     list.className = 'conflict-list';
-    for (const { folder, chars } of invalid) {
+    for (const { folder, chars } of items) {
         const li = document.createElement('li');
 
         const folderStrong = document.createElement('strong');
@@ -168,6 +217,36 @@ function renderInvalid() {
         list.appendChild(li);
     }
     invalidBox.appendChild(list);
+}
+
+// 有非法資料夾名稱或非法副檔名時顯示提示並停用儲存按鈕。
+function renderInvalid() {
+    const badFolders = detectInvalidFolders();
+    const badExtensions = detectInvalidExtensions();
+    invalidBox.replaceChildren();
+    saveBtn.disabled = badFolders.length > 0 || badExtensions.length > 0;
+
+    if (badFolders.length === 0 && badExtensions.length === 0) {
+        invalidBox.hidden = true;
+        return;
+    }
+    invalidBox.hidden = false;
+
+    // fallback：若該語系訊息缺漏或 i18n 快取尚未更新，至少顯示英文提示而非空白。
+    if (badFolders.length > 0) {
+        appendInvalidBlock(
+            t('folderNameInvalidNotice')
+                || 'These folder names are not allowed (cannot contain \\ / : * ? " < > |, be "." or "..", or end with a space or period). Fix them before saving:',
+            badFolders
+        );
+    }
+    if (badExtensions.length > 0) {
+        appendInvalidBlock(
+            t('extensionsInvalidNotice')
+                || 'These extensions contain characters that are not allowed (only letters, numbers, commas, periods and spaces). Fix them before saving:',
+            badExtensions
+        );
+    }
 }
 
 // 統一的即時驗證入口：重複副檔名提示 + 非法字元提示/停用儲存。
@@ -328,12 +407,9 @@ importFile.addEventListener('change', async () => {
     if (!file) return;
     try {
         const imported = JSON.parse(await file.text());
-        const merged = { ...defaultConfig, ...imported };
-        // Import applies immediately: keep only known keys, persist, reflect in UI.
-        const clean = {
-            conflictAction: merged.conflictAction,
-            folderExtensionMapping: merged.folderExtensionMapping
-        };
+        // Validate + sanitize before persisting: a malformed file must never
+        // reach storage (it would otherwise crash the background categorizer).
+        const clean = sanitizeConfig(imported);
         await saveConfig(clean);
         applyConfig(clean);
         flash(importBtn, t('imported'));
