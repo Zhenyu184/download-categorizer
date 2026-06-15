@@ -48,6 +48,7 @@
     "add": { "message": "新增" },
 
     "extensionsInvalidNotice": { "message": "以下副檔名含有不允許的字元（僅允許英文字母、數字、逗號、句點與空白），請修正後再儲存：" },
+    "folderNameInvalidNotice": { "message": "以下資料夾名稱不被允許（不可含有 \\ / : * ? \" < > |，不可為「.」或「..」，也不可以空白或句點結尾），請修正後再儲存：" },
 
     "saved": { "message": "已儲存！" },
     "imported": { "message": "已匯入" },
