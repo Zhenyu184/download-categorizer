@@ -1,8 +1,21 @@
 import { defaultConfig } from '../src/default.js';
 import { loadConfig, saveConfig, resetConfig } from '../src/config.js';
+import { localizePage, t } from '../src/i18n.js';
+
+// 翻譯靜態畫面（標題、區段標題、按鈕、衝突處理下拉選單等）。
+localizePage();
+
+// --- 左側分類導覽：點擊切換右側面板 ---
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach((item) => {
+    item.addEventListener('click', () => {
+        navItems.forEach((n) => n.classList.toggle('active', n === item));
+        panels.forEach((p) => { p.hidden = p.id !== item.dataset.target; });
+    });
+});
 
 // --- Elements ---
-const enableToggle    = document.getElementById('global-enable');
 const conflictSelect  = document.getElementById('conflict-action');
 const mappingList     = document.getElementById('mapping-list');
 const conflictsBox    = document.getElementById('mapping-conflicts');
@@ -63,7 +76,7 @@ function renderMappings() {
         folderInput.type = 'text';
         folderInput.className = 'form-input';
         folderInput.value = row.folder;
-        folderInput.placeholder = 'folder-name';
+        folderInput.placeholder = t('folderNameRowPlaceholder');
         folderInput.addEventListener('input', () => {
             row.folder = folderInput.value;
             renderConflicts();
@@ -73,7 +86,7 @@ function renderMappings() {
         extInput.type = 'text';
         extInput.className = 'form-input';
         extInput.value = row.extensions;
-        extInput.placeholder = 'pdf, doc, docx';
+        extInput.placeholder = t('extensionsRowPlaceholder');
         extInput.addEventListener('input', () => {
             row.extensions = extInput.value;
             renderConflicts();
@@ -81,7 +94,7 @@ function renderMappings() {
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'btn btn-danger';
-        removeBtn.textContent = 'Remove';
+        removeBtn.textContent = t('remove');
         removeBtn.addEventListener('click', () => {
             rows.splice(index, 1);
             renderMappings();
@@ -124,10 +137,10 @@ function renderConflicts() {
     conflictsBox.hidden = false;
 
     const title = document.createElement('p');
-    const noun = conflicts.length === 1 ? 'extension is' : 'extensions are';
-    title.textContent =
-        `${conflicts.length} ${noun} mapped to multiple folders. ` +
-        `The first matching folder (top to bottom) is applied:`;
+    const count = String(conflicts.length);
+    title.textContent = conflicts.length === 1
+        ? t('conflictNoticeOne', [count])
+        : t('conflictNoticeMany', [count]);
     conflictsBox.appendChild(title);
 
     const list = document.createElement('ul');
@@ -142,14 +155,13 @@ function renderConflicts() {
         const winnerStrong = document.createElement('strong');
         winnerStrong.textContent = winner;
 
-        li.append(extCode, ' → ', winnerStrong, ` (also in ${others.join(', ')})`);
+        li.append(extCode, ' → ', winnerStrong, ' ' + t('conflictAlsoIn', [others.join(', ')]));
         list.appendChild(li);
     }
     conflictsBox.appendChild(list);
 }
 
 function applyConfig(config) {
-    enableToggle.checked = config.enabled;
     conflictSelect.value = config.conflictAction;
     rows = rowsFromMapping(config.folderExtensionMapping);
     renderMappings();
@@ -157,7 +169,6 @@ function applyConfig(config) {
 
 function collectConfig() {
     return {
-        enabled: enableToggle.checked,
         conflictAction: conflictSelect.value,
         folderExtensionMapping: mappingFromRows()
     };
@@ -204,17 +215,31 @@ modalAddBtn.addEventListener('click', () => {
     closeModal();
 });
 
+// Save / Cancel act ONLY on the folder mapping. Conflict action and
+// import/export/reset persist immediately on their own (below), so here we
+// merge just the mapping into the stored config and leave everything else.
 saveBtn.addEventListener('click', async () => {
-    await saveConfig(collectConfig());
-    flash(saveBtn, 'Saved!');
+    const config = await loadConfig();
+    config.folderExtensionMapping = mappingFromRows();
+    await saveConfig(config);
+    flash(saveBtn, t('saved'));
 });
 
 cancelBtn.addEventListener('click', async () => {
-    applyConfig(await loadConfig());
+    const config = await loadConfig();
+    rows = rowsFromMapping(config.folderExtensionMapping);
+    renderMappings();
+});
+
+// Advanced Settings: conflict action is applied immediately (no Save needed).
+conflictSelect.addEventListener('change', async () => {
+    const config = await loadConfig();
+    config.conflictAction = conflictSelect.value;
+    await saveConfig(config);
 });
 
 resetBtn.addEventListener('click', async () => {
-    if (!confirm('Reset all settings to default? This cannot be undone.')) return;
+    if (!confirm(t('resetConfirm'))) return;
     applyConfig(await resetConfig());
 });
 
@@ -234,10 +259,17 @@ importFile.addEventListener('change', async () => {
     if (!file) return;
     try {
         const imported = JSON.parse(await file.text());
-        applyConfig({ ...defaultConfig, ...imported });
-        flash(importBtn, 'Imported — remember to Save');
+        const merged = { ...defaultConfig, ...imported };
+        // Import applies immediately: keep only known keys, persist, reflect in UI.
+        const clean = {
+            conflictAction: merged.conflictAction,
+            folderExtensionMapping: merged.folderExtensionMapping
+        };
+        await saveConfig(clean);
+        applyConfig(clean);
+        flash(importBtn, t('imported'));
     } catch {
-        alert('Invalid settings file.');
+        alert(t('invalidSettingsFile'));
     } finally {
         importFile.value = '';
     }

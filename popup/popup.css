@@ -1,117 +1,82 @@
+/* 與設定頁一致的淺色系、單一藍綠強調色、收斂邊角。 */
+:root {
+    --accent: #149488;
+    --accent-hover: #0f7b71;
+    --accent-ring: rgba(20, 148, 136, 0.18);
+
+    --bg: #ffffff;
+    --border: #e2e6e8;
+    --text: #1f2a2e;
+    --muted: #5f6b70;
+
+    --radius: 4px;
+}
+
 body {
-    width: 300px;
-    padding: 24px 18px 18px 18px;
-    font-family: 'Segoe UI', 'Noto Sans TC', Arial, sans-serif;
-    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
-    color: #222;
+    width: 248px;
+    padding: 14px 14px 40px 14px;   /* 底部留白給固定的設定鈕 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    border-top: 3px solid var(--accent);
+    line-height: 1.45;
 }
 
 h3 {
     margin-top: 0;
-    font-size: 1.25rem;
-    letter-spacing: 1px;
-    color: #2a4365;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
     text-align: center;
 }
 
-.button-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 18px 0 10px 0;
+p {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin: 6px 0 0 0;
+    text-align: justify;
 }
 
-#toggle-switch {
-    flex: 1;
-    padding: 12px 0;
-    border: none;
-    border-radius: 24px;
-    background: linear-gradient(90deg, #4f8cff 0%, #38b2ac 100%);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
-    transition: background 0.2s, box-shadow 0.2s;
+/* 段落與連結間距由 margin 控制，移除原本佔一整行高的 <br> */
+br {
+    display: none;
 }
 
-#toggle-switch:hover, #toggle-switch:focus {
-    background: linear-gradient(90deg, #2563eb 0%, #319795 100%);
-    box-shadow: 0 4px 16px rgba(56,178,172,0.12);
-    outline: none;
+a {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 10px;
 }
 
-.circle-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    background: #38b2ac;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(44,62,80,0.06);
-}
-
-.circle-btn:hover, .circle-btn:focus {
-    background: #319795;
-    outline: none;
+a:hover {
+    text-decoration: underline;
 }
 
 .settings-btn {
     position: fixed;
-    bottom: 15px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    bottom: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius);
     border: none;
-    background: linear-gradient(135deg, #3badb8 0%, #38b2ac 100%);
-    color: white;
-    font-size: 16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
+    transition: background 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .settings-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: var(--accent-hover);
 }
 
-.settings-btn:active {
-    transform: scale(0.95);
-}
-
-#status {
-    display: block;
-    text-align: center;
-    font-size: 0.98rem;
-    font-weight: 500;
-    margin-bottom: 12px;
-    color: #319795;
-    letter-spacing: 0.5px;
-}
-
-a {
-    font-size: 0.92rem;
-    color: #555;
-    margin: 6px 0 0 0;
-    text-align: center;
-}
-
-p {
-    font-size: 0.80rem;
-    color: #2a2a2a;
-    margin: 6px 0 0 0;
-    text-align: justify;
+.settings-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-ring);
 }

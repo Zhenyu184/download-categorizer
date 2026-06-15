@@ -1,0 +1,64 @@
+{
+    "extName": {
+        "message": "Download Categorizer",
+        "description": "Extension name shown in the Chrome Web Store and toolbar."
+    },
+    "extDescription": {
+        "message": "This extension automatically listens to download events and categorizes downloaded files into folders.",
+        "description": "Extension description shown in the Chrome Web Store."
+    },
+
+    "appName": { "message": "Download Categorizer" },
+    "popupIntro": {
+        "message": "Download Categorizer automatically organizes your downloads by sorting files into folders based on their file extensions."
+    },
+    "linkGithub": { "message": "GitHub Repository" },
+    "linkFaq": { "message": "FAQ" },
+    "popupSettingsTitle": { "message": "Settings" },
+
+    "settingsTitle": { "message": "Settings" },
+    "settingsSubtitle": { "message": "Customize your download file categorization rules" },
+    "folderMapping": { "message": "Folder Mapping" },
+    "folderNameHeader": { "message": "Folder Name" },
+    "extensionsHeader": { "message": "Extensions" },
+    "addMapping": { "message": "Add Mapping" },
+    "remove": { "message": "Remove" },
+    "advancedSettings": { "message": "Advanced Settings" },
+    "fileConflictHandling": { "message": "File Conflict Handling" },
+    "fileConflictHandlingDesc": { "message": "Choose what happens when a file with the same name already exists." },
+    "conflictUniquify": { "message": "Automatically Rename" },
+    "conflictOverwrite": { "message": "Overwrite Existing File" },
+    "conflictPrompt": { "message": "Ask User" },
+    "importExportSettings": { "message": "Import/Export Settings" },
+    "exportSettings": { "message": "Export Settings" },
+    "importSettings": { "message": "Import Settings" },
+    "resetToDefault": { "message": "Reset to Default" },
+    "saveSettings": { "message": "Save Settings" },
+    "cancel": { "message": "Cancel" },
+    "addFolderMapping": { "message": "Add Folder Mapping" },
+    "folderNameLabel": { "message": "Folder Name:" },
+    "folderNamePlaceholder": { "message": "e.g. documents" },
+    "extensionsLabel": { "message": "Extensions (comma separated):" },
+    "extensionsModalPlaceholder": { "message": "e.g. pdf,doc,docx" },
+    "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
+    "folderNameRowPlaceholder": { "message": "folder-name" },
+    "add": { "message": "Add" },
+
+    "saved": { "message": "Saved!" },
+    "imported": { "message": "Imported" },
+    "invalidSettingsFile": { "message": "Invalid settings file." },
+    "resetConfirm": { "message": "Reset all settings to default? This cannot be undone." },
+
+    "conflictNoticeOne": {
+        "message": "$count$ extension is mapped to multiple folders. The first matching folder (top to bottom) is applied:",
+        "placeholders": { "count": { "content": "$1", "example": "1" } }
+    },
+    "conflictNoticeMany": {
+        "message": "$count$ extensions are mapped to multiple folders. The first matching folder (top to bottom) is applied:",
+        "placeholders": { "count": { "content": "$1", "example": "3" } }
+    },
+    "conflictAlsoIn": {
+        "message": "(also in $folders$)",
+        "placeholders": { "folders": { "content": "$1", "example": "images, docs" } }
+    }
+}

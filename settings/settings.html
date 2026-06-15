@@ -1,100 +1,106 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Categorizer - Setting</title>
+    <title data-i18n="settingsTitle">Download Categorizer - Setting</title>
     <link rel="stylesheet" href="settings.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Settings</h1>
-            <p class="subtitle">Customize your download file categorization rules</p>
-        </header>
+    <div class="settings-layout">
+        <!-- 左側分類導覽 -->
+        <aside class="sidebar">
+            <div class="sidebar-brand" data-i18n="appName">Download Categorizer</div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-target="panel-mapping" data-i18n="folderMapping">Folder Mapping</button>
+                <button class="nav-item" data-target="panel-advanced" data-i18n="advancedSettings">Advanced Settings</button>
+                <button class="nav-item" data-target="panel-io" data-i18n="importExportSettings">Import/Export Settings</button>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer" data-i18n="linkGithub">
+                    GitHub Repository
+                </a>
+            </div>
+        </aside>
 
-        <main>
-            <!-- Folder Mapping Settings -->
-            <section class="settings-section">
-                <h2>Folder Mapping</h2>
+        <!-- 右側內容區 -->
+        <main class="content">
+            <!-- Folder Mapping -->
+            <section id="panel-mapping" class="panel">
+                <h1 class="panel-title" data-i18n="folderMapping">Folder Mapping</h1>
+                <p class="panel-subtitle" data-i18n="settingsSubtitle">Customize your download file categorization rules</p>
+
                 <div id="mapping-conflicts" class="mapping-hint" hidden></div>
                 <div class="mapping-container">
                     <div class="mapping-header">
-                        <span>Folder Name</span>
-                        <span>Extensions</span>
+                        <span data-i18n="folderNameHeader">Folder Name</span>
+                        <span data-i18n="extensionsHeader">Extensions</span>
                         <span></span>
                     </div>
                     <div id="mapping-list" class="mapping-list">
                         <!-- 動態產生的對應列表 -->
                     </div>
-                    <button id="add-mapping-btn" class="btn btn-primary">Add Mapping</button>
+                    <div class="mapping-actions">
+                        <button id="add-mapping-btn" class="btn btn-secondary" data-i18n="addMapping">Add Mapping</button>
+                        <div class="mapping-actions-end">
+                            <button id="cancel-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
+                            <button id="save-btn" class="btn btn-success" data-i18n="saveSettings">Save Settings</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- Advanced Settings -->
-            <section class="settings-section">
-                <h2>Advanced Settings</h2>
+            <section id="panel-advanced" class="panel" hidden>
+                <h1 class="panel-title" data-i18n="advancedSettings">Advanced Settings</h1>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <h3>File Conflict Handling</h3>
-                        <select id="conflict-action" class="form-select">
-                            <option value="uniquify">Automatically Rename</option>
-                            <option value="overwrite">Overwrite Existing File</option>
-                            <option value="prompt">Ask User</option>
-                        </select>
+                        <h3 data-i18n="fileConflictHandling">File Conflict Handling</h3>
+                        <p class="setting-desc" data-i18n="fileConflictHandlingDesc">Choose what happens when a file with the same name already exists.</p>
                     </div>
+                    <select id="conflict-action" class="form-select">
+                        <option value="uniquify" data-i18n="conflictUniquify">Automatically Rename</option>
+                        <option value="overwrite" data-i18n="conflictOverwrite">Overwrite Existing File</option>
+                        <option value="prompt" data-i18n="conflictPrompt">Ask User</option>
+                    </select>
                 </div>
             </section>
 
             <!-- Import/Export Settings -->
-            <section class="settings-section">
-                <h2>Import/Export Settings</h2>
+            <section id="panel-io" class="panel" hidden>
+                <h1 class="panel-title" data-i18n="importExportSettings">Import/Export Settings</h1>
                 <div class="setting-item">
                     <div class="button-group">
-                        <button id="export-btn" class="btn btn-secondary">Export Settings</button>
-                        <button id="import-btn" class="btn btn-secondary">Import Settings</button>
+                        <button id="export-btn" class="btn btn-secondary" data-i18n="exportSettings">Export Settings</button>
+                        <button id="import-btn" class="btn btn-secondary" data-i18n="importSettings">Import Settings</button>
+                        <button id="reset-btn" class="btn btn-danger" data-i18n="resetToDefault">Reset to Default</button>
                         <input type="file" id="import-file" accept=".json" style="display: none;">
                     </div>
                 </div>
-                <div class="setting-item">
-                    <button id="reset-btn" class="btn btn-danger">Reset to Default</button>
-                </div>
             </section>
         </main>
-
-        <footer>
-            <div class="footer-buttons">
-                <button id="save-btn" class="btn btn-success">Save Settings</button>
-                <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
-            </div>
-            <p class="footer-info">
-                <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer">
-                    GitHub Repository
-                </a>
-            </p>
-        </footer>
     </div>
 
     <!-- Add Mapping Modal -->
     <div id="add-mapping-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add Folder Mapping</h3>
+                <h3 data-i18n="addFolderMapping">Add Folder Mapping</h3>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="folder-name">Folder Name:</label>
-                    <input type="text" id="folder-name" class="form-input" placeholder="e.g. documents">
+                    <label for="folder-name" data-i18n="folderNameLabel">Folder Name:</label>
+                    <input type="text" id="folder-name" class="form-input" data-i18n-placeholder="folderNamePlaceholder" placeholder="e.g. documents">
                 </div>
                 <div class="form-group">
-                    <label for="extensions">Extensions (comma separated):</label>
-                    <input type="text" id="extensions" class="form-input" placeholder="e.g. pdf,doc,docx">
+                    <label for="extensions" data-i18n="extensionsLabel">Extensions (comma separated):</label>
+                    <input type="text" id="extensions" class="form-input" data-i18n-placeholder="extensionsModalPlaceholder" placeholder="e.g. pdf,doc,docx">
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="modal-add-btn" class="btn btn-primary">Add</button>
-                <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+                <button id="modal-add-btn" class="btn btn-primary" data-i18n="add">Add</button>
+                <button id="modal-cancel-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
             </div>
         </div>
     </div>
