@@ -5,6 +5,16 @@ import { localizePage, t } from '../src/i18n.js';
 // 翻譯靜態畫面（標題、區段標題、按鈕、衝突處理下拉選單等）。
 localizePage();
 
+// --- 左側分類導覽：點擊切換右側面板 ---
+const navItems = document.querySelectorAll('.nav-item');
+const panels = document.querySelectorAll('.panel');
+navItems.forEach((item) => {
+    item.addEventListener('click', () => {
+        navItems.forEach((n) => n.classList.toggle('active', n === item));
+        panels.forEach((p) => { p.hidden = p.id !== item.dataset.target; });
+    });
+});
+
 // --- Elements ---
 const conflictSelect  = document.getElementById('conflict-action');
 const mappingList     = document.getElementById('mapping-list');

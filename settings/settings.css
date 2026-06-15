@@ -25,63 +25,111 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', Roboto, sans-serif;
-    background: var(--bg);
+    background: var(--surface);
     min-height: 100vh;
     color: var(--text);
     line-height: 1.5;
 }
 
-/* 灰底 + 白色區塊卡片：不用白色頁面外框，避免任何橫貫全寬的框線/卡片邊線。 */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: transparent;
+/* --- 雙欄結構：左側分類導覽 + 右側內容區 --- */
+.settings-layout {
+    display: flex;
+    min-height: 100vh;
 }
 
-/* --- Header --- */
-header {
-    padding: 1.75rem 2rem;
+/* 左側導覽 */
+.sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
 }
 
-header h1 {
-    font-size: 1.4rem;
+.sidebar-brand {
+    padding: 0 1.5rem 1.25rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
     color: var(--accent);
 }
 
-.subtitle {
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    text-align: left;
+    background: none;
+    border: none;
+    border-left: 3px solid transparent;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.92rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-item:hover {
+    background: var(--surface-alt);
+}
+
+.nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--surface-alt);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 1.5rem 0;
+}
+
+.sidebar-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.sidebar-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 右側內容區 */
+.content {
+    flex: 1;
+    min-width: 0;
+    padding: 2.5rem 3rem;
+}
+
+.panel {
+    max-width: 1000px;
+}
+
+.panel-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+}
+
+.panel-subtitle {
     color: var(--muted);
     font-size: 0.9rem;
-}
-
-main {
-    padding: 2rem;
-}
-
-/* --- Sections --- */
-.settings-section {
     margin-bottom: 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
 }
 
-.settings-section h2 {
-    background: var(--surface-alt);
-    padding: 0.85rem 1.25rem;
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    border-bottom: 1px solid var(--border);
-}
-
+/* 設定列：左為標題＋說明，右為控制項 */
 .setting-item {
-    padding: 1.25rem;
+    padding: 1.25rem 0;
     border-bottom: 1px solid var(--border);
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .setting-item:last-child {
@@ -91,7 +139,12 @@ main {
 .setting-info h3 {
     font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.setting-desc {
+    color: var(--muted);
+    font-size: 0.85rem;
 }
 
 /* --- Buttons --- */
@@ -148,7 +201,7 @@ main {
 
 /* --- Mapping / conflict hint --- */
 .mapping-hint {
-    margin: 1rem 1.25rem 0;
+    margin: 0 0 1rem;
     padding: 0.75rem 1rem;
     color: var(--text);
     background: var(--surface-alt);
@@ -176,7 +229,7 @@ main {
 }
 
 .mapping-container {
-    padding: 1.25rem;
+    padding: 0;
 }
 
 .mapping-header {
@@ -194,23 +247,6 @@ main {
 
 .mapping-list {
     margin-bottom: 1rem;
-}
-
-/* 較短的區塊（Advanced / Import-Export）在桌機並排 */
-.section-row {
-    display: grid;
-    gap: 1.5rem;
-}
-
-@media (min-width: 900px) {
-    .section-row {
-        grid-template-columns: 1fr 1fr;
-        align-items: start;
-    }
-
-    .section-row .settings-section {
-        margin-bottom: 0;
-    }
 }
 
 /* Folder Mapping 區塊的動作列：左為 Add Mapping，右為 Cancel / Save */
@@ -270,23 +306,6 @@ main {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
-}
-
-/* --- Footer --- */
-footer {
-    background: transparent;
-    padding: 1.5rem 2rem;
-    text-align: center;
-}
-
-.footer-info a {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.footer-info a:hover {
-    text-decoration: underline;
 }
 
 /* --- Modal --- */
@@ -365,14 +384,39 @@ footer {
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-    .container {
-        border: none;
+    .settings-layout {
+        flex-direction: column;
     }
 
-    header,
-    main,
-    footer {
-        padding: 1.25rem;
+    .sidebar {
+        width: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .nav-item {
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.5rem 1rem;
+    }
+
+    .nav-item.active {
+        border-left: none;
+        border-bottom-color: var(--accent);
+    }
+
+    .sidebar-footer {
+        margin-top: 0.5rem;
+    }
+
+    .content {
+        padding: 1.5rem 1.25rem;
     }
 
     .mapping-header,

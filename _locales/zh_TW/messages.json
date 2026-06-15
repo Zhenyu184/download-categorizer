@@ -25,6 +25,7 @@
     "remove": { "message": "移除" },
     "advancedSettings": { "message": "進階設定" },
     "fileConflictHandling": { "message": "檔名衝突處理" },
+    "fileConflictHandlingDesc": { "message": "當已存在同名檔案時，選擇要如何處理。" },
     "conflictUniquify": { "message": "自動重新命名" },
     "conflictOverwrite": { "message": "覆寫既有檔案" },
     "conflictPrompt": { "message": "詢問使用者" },

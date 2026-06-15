@@ -25,6 +25,7 @@
     "remove": { "message": "Remove" },
     "advancedSettings": { "message": "Advanced Settings" },
     "fileConflictHandling": { "message": "File Conflict Handling" },
+    "fileConflictHandlingDesc": { "message": "Choose what happens when a file with the same name already exists." },
     "conflictUniquify": { "message": "Automatically Rename" },
     "conflictOverwrite": { "message": "Overwrite Existing File" },
     "conflictPrompt": { "message": "Ask User" },

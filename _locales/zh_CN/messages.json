@@ -25,6 +25,7 @@
     "remove": { "message": "移除" },
     "advancedSettings": { "message": "高级设置" },
     "fileConflictHandling": { "message": "文件名冲突处理" },
+    "fileConflictHandlingDesc": { "message": "当已存在同名文件时，选择要如何处理。" },
     "conflictUniquify": { "message": "自动重命名" },
     "conflictOverwrite": { "message": "覆盖已有文件" },
     "conflictPrompt": { "message": "询问用户" },

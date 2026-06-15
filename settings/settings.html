@@ -7,16 +7,29 @@
     <link rel="stylesheet" href="settings.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 data-i18n="settingsTitle">Settings</h1>
-            <p class="subtitle" data-i18n="settingsSubtitle">Customize your download file categorization rules</p>
-        </header>
+    <div class="settings-layout">
+        <!-- 左側分類導覽 -->
+        <aside class="sidebar">
+            <div class="sidebar-brand" data-i18n="appName">Download Categorizer</div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-target="panel-mapping" data-i18n="folderMapping">Folder Mapping</button>
+                <button class="nav-item" data-target="panel-advanced" data-i18n="advancedSettings">Advanced Settings</button>
+                <button class="nav-item" data-target="panel-io" data-i18n="importExportSettings">Import/Export Settings</button>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer" data-i18n="linkGithub">
+                    GitHub Repository
+                </a>
+            </div>
+        </aside>
 
-        <main>
-            <!-- Folder Mapping Settings -->
-            <section class="settings-section">
-                <h2 data-i18n="folderMapping">Folder Mapping</h2>
+        <!-- 右側內容區 -->
+        <main class="content">
+            <!-- Folder Mapping -->
+            <section id="panel-mapping" class="panel">
+                <h1 class="panel-title" data-i18n="folderMapping">Folder Mapping</h1>
+                <p class="panel-subtitle" data-i18n="settingsSubtitle">Customize your download file categorization rules</p>
+
                 <div id="mapping-conflicts" class="mapping-hint" hidden></div>
                 <div class="mapping-container">
                     <div class="mapping-header">
@@ -37,25 +50,25 @@
                 </div>
             </section>
 
-            <div class="section-row">
             <!-- Advanced Settings -->
-            <section class="settings-section">
-                <h2 data-i18n="advancedSettings">Advanced Settings</h2>
+            <section id="panel-advanced" class="panel" hidden>
+                <h1 class="panel-title" data-i18n="advancedSettings">Advanced Settings</h1>
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3 data-i18n="fileConflictHandling">File Conflict Handling</h3>
-                        <select id="conflict-action" class="form-select">
-                            <option value="uniquify" data-i18n="conflictUniquify">Automatically Rename</option>
-                            <option value="overwrite" data-i18n="conflictOverwrite">Overwrite Existing File</option>
-                            <option value="prompt" data-i18n="conflictPrompt">Ask User</option>
-                        </select>
+                        <p class="setting-desc" data-i18n="fileConflictHandlingDesc">Choose what happens when a file with the same name already exists.</p>
                     </div>
+                    <select id="conflict-action" class="form-select">
+                        <option value="uniquify" data-i18n="conflictUniquify">Automatically Rename</option>
+                        <option value="overwrite" data-i18n="conflictOverwrite">Overwrite Existing File</option>
+                        <option value="prompt" data-i18n="conflictPrompt">Ask User</option>
+                    </select>
                 </div>
             </section>
 
             <!-- Import/Export Settings -->
-            <section class="settings-section">
-                <h2 data-i18n="importExportSettings">Import/Export Settings</h2>
+            <section id="panel-io" class="panel" hidden>
+                <h1 class="panel-title" data-i18n="importExportSettings">Import/Export Settings</h1>
                 <div class="setting-item">
                     <div class="button-group">
                         <button id="export-btn" class="btn btn-secondary" data-i18n="exportSettings">Export Settings</button>
@@ -65,16 +78,7 @@
                     </div>
                 </div>
             </section>
-            </div>
         </main>
-
-        <footer>
-            <p class="footer-info">
-                <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer" data-i18n="linkGithub">
-                    GitHub Repository
-                </a>
-            </p>
-        </footer>
     </div>
 
     <!-- Add Mapping Modal -->
