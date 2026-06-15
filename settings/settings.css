@@ -31,20 +31,16 @@ body {
     line-height: 1.5;
 }
 
+/* 灰底 + 白色區塊卡片：不用白色頁面外框，避免任何橫貫全寬的框線/卡片邊線。 */
 .container {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0 auto;
-    background: var(--surface);
-    min-height: 100vh;
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
+    background: transparent;
 }
 
 /* --- Header --- */
 header {
     padding: 1.75rem 2rem;
-    border-top: 3px solid var(--accent);
-    border-bottom: 1px solid var(--border);
 }
 
 header h1 {
@@ -185,7 +181,7 @@ main {
 
 .mapping-header {
     display: grid;
-    grid-template-columns: 1fr 2fr auto;
+    grid-template-columns: minmax(110px, 0.85fr) 2.5fr auto;
     gap: 1rem;
     padding: 0.6rem 0.75rem;
     background: var(--surface-alt);
@@ -198,6 +194,23 @@ main {
 
 .mapping-list {
     margin-bottom: 1rem;
+}
+
+/* 較短的區塊（Advanced / Import-Export）在桌機並排 */
+.section-row {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+    .section-row {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+
+    .section-row .settings-section {
+        margin-bottom: 0;
+    }
 }
 
 /* Folder Mapping 區塊的動作列：左為 Add Mapping，右為 Cancel / Save */
@@ -216,7 +229,7 @@ main {
 
 .mapping-item {
     display: grid;
-    grid-template-columns: 1fr 2fr auto;
+    grid-template-columns: minmax(110px, 0.85fr) 2.5fr auto;
     gap: 1rem;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--border);
@@ -261,9 +274,8 @@ main {
 
 /* --- Footer --- */
 footer {
-    background: var(--surface-alt);
+    background: transparent;
     padding: 1.5rem 2rem;
-    border-top: 1px solid var(--border);
     text-align: center;
 }
 
