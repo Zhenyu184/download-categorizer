@@ -44,7 +44,7 @@
     "add": { "message": "Add" },
 
     "saved": { "message": "Saved!" },
-    "importedRemember": { "message": "Imported — remember to Save" },
+    "imported": { "message": "Imported" },
     "invalidSettingsFile": { "message": "Invalid settings file." },
     "resetConfirm": { "message": "Reset all settings to default? This cannot be undone." },
 

@@ -44,7 +44,7 @@
     "add": { "message": "新增" },
 
     "saved": { "message": "已保存！" },
-    "importedRemember": { "message": "已导入 — 记得点保存" },
+    "imported": { "message": "已导入" },
     "invalidSettingsFile": { "message": "设置文件格式无效。" },
     "resetConfirm": { "message": "确定要将所有设置重置为默认值吗？此操作无法撤销。" },
 

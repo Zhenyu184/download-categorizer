@@ -27,7 +27,13 @@
                     <div id="mapping-list" class="mapping-list">
                         <!-- 動態產生的對應列表 -->
                     </div>
-                    <button id="add-mapping-btn" class="btn btn-primary" data-i18n="addMapping">Add Mapping</button>
+                    <div class="mapping-actions">
+                        <button id="add-mapping-btn" class="btn btn-secondary" data-i18n="addMapping">Add Mapping</button>
+                        <div class="mapping-actions-end">
+                            <button id="cancel-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
+                            <button id="save-btn" class="btn btn-success" data-i18n="saveSettings">Save Settings</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -53,20 +59,14 @@
                     <div class="button-group">
                         <button id="export-btn" class="btn btn-secondary" data-i18n="exportSettings">Export Settings</button>
                         <button id="import-btn" class="btn btn-secondary" data-i18n="importSettings">Import Settings</button>
+                        <button id="reset-btn" class="btn btn-danger" data-i18n="resetToDefault">Reset to Default</button>
                         <input type="file" id="import-file" accept=".json" style="display: none;">
                     </div>
-                </div>
-                <div class="setting-item">
-                    <button id="reset-btn" class="btn btn-danger" data-i18n="resetToDefault">Reset to Default</button>
                 </div>
             </section>
         </main>
 
         <footer>
-            <div class="footer-buttons">
-                <button id="save-btn" class="btn btn-success" data-i18n="saveSettings">Save Settings</button>
-                <button id="cancel-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
-            </div>
             <p class="footer-info">
                 <a href="https://github.com/Zhenyu184/download-categorizer" target="_blank" rel="noopener noreferrer" data-i18n="linkGithub">
                     GitHub Repository

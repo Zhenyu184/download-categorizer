@@ -44,7 +44,7 @@
     "add": { "message": "新增" },
 
     "saved": { "message": "已儲存！" },
-    "importedRemember": { "message": "已匯入 — 記得按儲存" },
+    "imported": { "message": "已匯入" },
     "invalidSettingsFile": { "message": "設定檔格式無效。" },
     "resetConfirm": { "message": "確定要將所有設定重設為預設值嗎？此動作無法復原。" },
 

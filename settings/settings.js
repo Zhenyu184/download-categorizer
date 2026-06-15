@@ -205,13 +205,27 @@ modalAddBtn.addEventListener('click', () => {
     closeModal();
 });
 
+// Save / Cancel act ONLY on the folder mapping. Conflict action and
+// import/export/reset persist immediately on their own (below), so here we
+// merge just the mapping into the stored config and leave everything else.
 saveBtn.addEventListener('click', async () => {
-    await saveConfig(collectConfig());
+    const config = await loadConfig();
+    config.folderExtensionMapping = mappingFromRows();
+    await saveConfig(config);
     flash(saveBtn, t('saved'));
 });
 
 cancelBtn.addEventListener('click', async () => {
-    applyConfig(await loadConfig());
+    const config = await loadConfig();
+    rows = rowsFromMapping(config.folderExtensionMapping);
+    renderMappings();
+});
+
+// Advanced Settings: conflict action is applied immediately (no Save needed).
+conflictSelect.addEventListener('change', async () => {
+    const config = await loadConfig();
+    config.conflictAction = conflictSelect.value;
+    await saveConfig(config);
 });
 
 resetBtn.addEventListener('click', async () => {
@@ -235,8 +249,15 @@ importFile.addEventListener('change', async () => {
     if (!file) return;
     try {
         const imported = JSON.parse(await file.text());
-        applyConfig({ ...defaultConfig, ...imported });
-        flash(importBtn, t('importedRemember'));
+        const merged = { ...defaultConfig, ...imported };
+        // Import applies immediately: keep only known keys, persist, reflect in UI.
+        const clean = {
+            conflictAction: merged.conflictAction,
+            folderExtensionMapping: merged.folderExtensionMapping
+        };
+        await saveConfig(clean);
+        applyConfig(clean);
+        flash(importBtn, t('imported'));
     } catch {
         alert(t('invalidSettingsFile'));
     } finally {
