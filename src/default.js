@@ -2,7 +2,6 @@
 export const STORAGE_KEY = 'config';
 
 export const defaultConfig = {
-    enabled: true,
     conflictAction: 'uniquify',
     folderExtensionMapping: {
         'music': [

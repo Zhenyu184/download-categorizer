@@ -43,21 +43,21 @@ const ok = (name, cond) => { (cond ? pass++ : fail++); console.log(`${cond ? 'âœ
 
 // config module
 const c1 = await loadConfig();
-ok('loadConfig returns defaults when empty', c1.enabled === true && c1.conflictAction === 'uniquify' && !!c1.folderExtensionMapping.music);
+ok('loadConfig returns defaults when empty', c1.conflictAction === 'uniquify' && !!c1.folderExtensionMapping.music);
 
-await saveConfig({ ...defaultConfig, enabled: false, conflictAction: 'overwrite' });
-ok('saveConfig persists under single "config" key', STORAGE_KEY === 'config' && store.config.enabled === false);
+await saveConfig({ ...defaultConfig, conflictAction: 'overwrite' });
+ok('saveConfig persists under single "config" key', STORAGE_KEY === 'config' && store.config.conflictAction === 'overwrite');
 
 const c3 = await loadConfig();
-ok('loadConfig merges stored over defaults', c3.enabled === false && c3.conflictAction === 'overwrite' && !!c3.folderExtensionMapping.video);
+ok('loadConfig merges stored over defaults', c3.conflictAction === 'overwrite' && !!c3.folderExtensionMapping.video);
 
 let observed = null;
 onConfigChanged((cfg) => { observed = cfg; });
-await saveConfig({ ...defaultConfig, enabled: true, folderExtensionMapping: { docs: ['pdf'] } });
-ok('onConfigChanged delivers merged config on sync change', observed && observed.enabled === true && observed.folderExtensionMapping.docs[0] === 'pdf');
+await saveConfig({ ...defaultConfig, folderExtensionMapping: { docs: ['pdf'] } });
+ok('onConfigChanged delivers merged config on sync change', observed && observed.folderExtensionMapping.docs[0] === 'pdf');
 
 const c5 = await resetConfig();
-ok('resetConfig clears storage and returns defaults', !('config' in store) && c5.enabled === true && c5.conflictAction === 'uniquify');
+ok('resetConfig clears storage and returns defaults', !('config' in store) && c5.conflictAction === 'uniquify');
 
 // categorizer
 const cat = Categorizer.getInstance();

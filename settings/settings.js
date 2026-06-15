@@ -6,7 +6,6 @@ import { localizePage, t } from '../src/i18n.js';
 localizePage();
 
 // --- Elements ---
-const enableToggle    = document.getElementById('global-enable');
 const conflictSelect  = document.getElementById('conflict-action');
 const mappingList     = document.getElementById('mapping-list');
 const conflictsBox    = document.getElementById('mapping-conflicts');
@@ -29,10 +28,6 @@ const extensionsInput = document.getElementById('extensions');
 // Edits live here until "Save Settings" persists them. Each row keeps
 // extensions as a comma-separated string for friendlier inline editing.
 let rows = []; // [{ folder, extensions }]
-
-// settings.html 沒有「啟用」開關（啟用/停用由 popup 控制），這裡只負責
-// 在儲存時保留既有的 enabled 值，不要把它覆寫掉。
-let currentEnabled = defaultConfig.enabled;
 
 // --- Helpers ---
 function parseExtensions(text) {
@@ -157,8 +152,6 @@ function renderConflicts() {
 }
 
 function applyConfig(config) {
-    currentEnabled = config.enabled;
-    if (enableToggle) enableToggle.checked = config.enabled;
     conflictSelect.value = config.conflictAction;
     rows = rowsFromMapping(config.folderExtensionMapping);
     renderMappings();
@@ -166,7 +159,6 @@ function applyConfig(config) {
 
 function collectConfig() {
     return {
-        enabled: enableToggle ? enableToggle.checked : currentEnabled,
         conflictAction: conflictSelect.value,
         folderExtensionMapping: mappingFromRows()
     };

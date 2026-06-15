@@ -47,11 +47,6 @@ class DownloadHandler {
     async #onDeterminingFilename(downloadItem, suggest) {
         await this.#ready;
 
-        if (!this.#config.enabled) {
-            suggest();
-            return;
-        }
-
         const extension = FileUtils.getExtension(downloadItem.filename);
         const targetFolder = this.#categorizer.categorize(extension);
 

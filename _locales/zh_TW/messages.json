@@ -15,10 +15,6 @@
     "linkGithub": { "message": "GitHub 儲存庫" },
     "linkFaq": { "message": "常見問題" },
     "popupSettingsTitle": { "message": "設定" },
-    "enableCategorizer": { "message": "啟用分類器" },
-    "disableCategorizer": { "message": "停用分類器" },
-    "statusOn": { "message": "分類器：開啟" },
-    "statusOff": { "message": "分類器：關閉" },
 
     "settingsTitle": { "message": "設定" },
     "settingsSubtitle": { "message": "自訂你的下載檔案分類規則" },

@@ -22,26 +22,6 @@ h3 {
     margin: 18px 0 10px 0;
 }
 
-#toggle-switch {
-    flex: 1;
-    padding: 12px 0;
-    border: none;
-    border-radius: 24px;
-    background: linear-gradient(90deg, #4f8cff 0%, #38b2ac 100%);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
-    transition: background 0.2s, box-shadow 0.2s;
-}
-
-#toggle-switch:hover, #toggle-switch:focus {
-    background: linear-gradient(90deg, #2563eb 0%, #319795 100%);
-    box-shadow: 0 4px 16px rgba(56,178,172,0.12);
-    outline: none;
-}
-
 .circle-btn {
     width: 40px;
     height: 40px;
@@ -90,16 +70,6 @@ h3 {
 
 .settings-btn:active {
     transform: scale(0.95);
-}
-
-#status {
-    display: block;
-    text-align: center;
-    font-size: 0.98rem;
-    font-weight: 500;
-    margin-bottom: 12px;
-    color: #319795;
-    letter-spacing: 0.5px;
 }
 
 a {

@@ -15,10 +15,6 @@
     "linkGithub": { "message": "GitHub Repository" },
     "linkFaq": { "message": "FAQ" },
     "popupSettingsTitle": { "message": "Settings" },
-    "enableCategorizer": { "message": "Enable Categorizer" },
-    "disableCategorizer": { "message": "Disable Categorizer" },
-    "statusOn": { "message": "Categorizer is ON" },
-    "statusOff": { "message": "Categorizer is OFF" },
 
     "settingsTitle": { "message": "Settings" },
     "settingsSubtitle": { "message": "Customize your download file categorization rules" },

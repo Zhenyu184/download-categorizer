@@ -15,10 +15,6 @@
     "linkGithub": { "message": "GitHub 仓库" },
     "linkFaq": { "message": "常见问题" },
     "popupSettingsTitle": { "message": "设置" },
-    "enableCategorizer": { "message": "启用分类器" },
-    "disableCategorizer": { "message": "停用分类器" },
-    "statusOn": { "message": "分类器：开启" },
-    "statusOff": { "message": "分类器：关闭" },
 
     "settingsTitle": { "message": "设置" },
     "settingsSubtitle": { "message": "自定义你的下载文件分类规则" },
