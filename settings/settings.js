@@ -5,6 +5,13 @@ import { localizePage, t } from '../src/i18n.js';
 // 翻譯靜態畫面（標題、區段標題、按鈕、衝突處理下拉選單等）。
 localizePage();
 
+// 側欄版本資訊：從 manifest 讀取，避免在多處寫死版本號。
+const versionEl = document.getElementById('app-version');
+if (versionEl) {
+    const { version } = chrome.runtime.getManifest();
+    versionEl.textContent = t('versionLabel', [version]) || `v${version}`;
+}
+
 // --- 左側分類導覽：點擊切換右側面板 ---
 const navItems = document.querySelectorAll('.nav-item');
 const panels = document.querySelectorAll('.panel');
@@ -19,6 +26,7 @@ navItems.forEach((item) => {
 const conflictSelect  = document.getElementById('conflict-action');
 const mappingList     = document.getElementById('mapping-list');
 const conflictsBox    = document.getElementById('mapping-conflicts');
+const invalidBox      = document.getElementById('mapping-invalid');
 const addMappingBtn   = document.getElementById('add-mapping-btn');
 const exportBtn       = document.getElementById('export-btn');
 const importBtn       = document.getElementById('import-btn');
@@ -40,6 +48,11 @@ const extensionsInput = document.getElementById('extensions');
 let rows = []; // [{ folder, extensions }]
 
 // --- Helpers ---
+// 副檔名欄位只接受英文大小寫、數字、逗號、句點與空白；其餘字元視為非法。
+// 全域版供 match() 蒐集所有非法字元；無 g 旗標版供 test()（避免 lastIndex 狀態問題）。
+const EXTENSIONS_ILLEGAL = /[^A-Za-z0-9., ]/g;
+const hasIllegalChars = (text) => /[^A-Za-z0-9., ]/.test(text);
+
 function parseExtensions(text) {
     return [...new Set(
         text.split(',')
@@ -79,7 +92,7 @@ function renderMappings() {
         folderInput.placeholder = t('folderNameRowPlaceholder');
         folderInput.addEventListener('input', () => {
             row.folder = folderInput.value;
-            renderConflicts();
+            validate();
         });
 
         const extInput = document.createElement('input');
@@ -87,9 +100,11 @@ function renderMappings() {
         extInput.className = 'form-input';
         extInput.value = row.extensions;
         extInput.placeholder = t('extensionsRowPlaceholder');
+        extInput.classList.toggle('input-invalid', hasIllegalChars(row.extensions));
         extInput.addEventListener('input', () => {
             row.extensions = extInput.value;
-            renderConflicts();
+            extInput.classList.toggle('input-invalid', hasIllegalChars(extInput.value));
+            validate();
         });
 
         const removeBtn = document.createElement('button');
@@ -104,7 +119,61 @@ function renderMappings() {
         mappingList.appendChild(item);
     });
 
+    validate();
+}
+
+// 偵測含有非法字元的副檔名欄位（僅檢查會被儲存的列，即資料夾名稱非空者），
+// 回傳每列的資料夾名稱與出現過的非法字元。
+function detectInvalid() {
+    const result = [];
+    for (const { folder, extensions } of rows) {
+        const name = folder.trim();
+        if (!name) continue;
+        const bad = extensions.match(EXTENSIONS_ILLEGAL);
+        if (bad) result.push({ folder: name, chars: [...new Set(bad)] });
+    }
+    return result;
+}
+
+// 與「重複副檔名提示」相同的提示框樣式；有非法字元時顯示並停用儲存按鈕。
+function renderInvalid() {
+    const invalid = detectInvalid();
+    invalidBox.replaceChildren();
+    saveBtn.disabled = invalid.length > 0;
+
+    if (invalid.length === 0) {
+        invalidBox.hidden = true;
+        return;
+    }
+    invalidBox.hidden = false;
+
+    const title = document.createElement('p');
+    // fallback：若該語系訊息缺漏或 i18n 快取尚未更新，至少顯示英文提示而非空白。
+    title.textContent = t('extensionsInvalidNotice')
+        || 'These extensions contain characters that are not allowed (only letters, numbers, commas, periods and spaces). Fix them before saving:';
+    invalidBox.appendChild(title);
+
+    const list = document.createElement('ul');
+    list.className = 'conflict-list';
+    for (const { folder, chars } of invalid) {
+        const li = document.createElement('li');
+
+        const folderStrong = document.createElement('strong');
+        folderStrong.textContent = folder;
+
+        const charsCode = document.createElement('code');
+        charsCode.textContent = chars.join(' ');
+
+        li.append(folderStrong, ' → ', charsCode);
+        list.appendChild(li);
+    }
+    invalidBox.appendChild(list);
+}
+
+// 統一的即時驗證入口：重複副檔名提示 + 非法字元提示/停用儲存。
+function validate() {
     renderConflicts();
+    renderInvalid();
 }
 
 // Detect extensions that appear in more than one folder. Iteration follows

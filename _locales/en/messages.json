@@ -12,7 +12,10 @@
     "popupIntro": {
         "message": "Download Categorizer automatically organizes your downloads by sorting files into folders based on their file extensions."
     },
-    "linkGithub": { "message": "GitHub Repository" },
+    "versionLabel": {
+        "message": "Version $version$",
+        "placeholders": { "version": { "content": "$1", "example": "1.1.0" } }
+    },
     "linkFaq": { "message": "FAQ" },
     "popupSettingsTitle": { "message": "Settings" },
 
@@ -43,6 +46,8 @@
     "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
     "folderNameRowPlaceholder": { "message": "folder-name" },
     "add": { "message": "Add" },
+
+    "extensionsInvalidNotice": { "message": "These extensions contain characters that are not allowed (only letters, numbers, commas, periods and spaces). Fix them before saving:" },
 
     "saved": { "message": "Saved!" },
     "imported": { "message": "Imported" },

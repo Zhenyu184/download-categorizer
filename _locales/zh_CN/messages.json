@@ -12,7 +12,10 @@
     "popupIntro": {
         "message": "下载分类器会根据文件扩展名，自动将你的下载文件分类整理到对应的文件夹。"
     },
-    "linkGithub": { "message": "GitHub 仓库" },
+    "versionLabel": {
+        "message": "版本 $version$",
+        "placeholders": { "version": { "content": "$1", "example": "1.1.0" } }
+    },
     "linkFaq": { "message": "常见问题" },
     "popupSettingsTitle": { "message": "设置" },
 
@@ -43,6 +46,8 @@
     "extensionsRowPlaceholder": { "message": "pdf, doc, docx" },
     "folderNameRowPlaceholder": { "message": "文件夹名称" },
     "add": { "message": "新增" },
+
+    "extensionsInvalidNotice": { "message": "以下扩展名包含不允许的字符（仅允许英文字母、数字、逗号、句点与空格），请修正后再保存：" },
 
     "saved": { "message": "已保存！" },
     "imported": { "message": "已导入" },
